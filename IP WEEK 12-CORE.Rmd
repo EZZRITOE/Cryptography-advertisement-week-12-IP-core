@@ -85,7 +85,7 @@ sum(duplicated(df))
 
 ```{r}
 #removal of incomplete objects in the dataset
-na.omit(df)
+head(na.omit(df))
 ```
 
 # Checking for outliers in area . income column
@@ -125,7 +125,7 @@ df.Age.median
 
 # Measures of dispersion
 
-\#\#selecting the most important columns for calculating measures of
+\#\#\#selecting the most important columns for calculating measures of
 dispersion-AGE and DAILY INTERNET USAGE
 
 ### getting the minimum for internet usage
