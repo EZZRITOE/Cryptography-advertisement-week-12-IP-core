@@ -1,0 +1,237 @@
+---
+title: "IPwk 12 core"
+author: "EZRA MAGETO"
+date: "7/12/2021"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## 1) Defining the question
+
+## Identifying which individuals are most likely to click on the cryptography course advert
+
+## 2)Defining the metrics for success
+
+## Bi variate and Uni variate Exploratory data Analysis
+
+##   3)Understanding the context
+
+## A Kenyan entrepreneur has created an online cryptography course and would want to advertise it on her blog. She currently targets audiences originating from various countries. In the past, she ran ads to advertise a related course on the same blog and collected data in the process. She would now like to employ your services as a Data Science Consultant to help her identify which individuals are most likely to click on her ads.
+
+# 4) Experimental Design
+
+### 1)Define the question, the metric for success, the context, experimental design taken and the appropriateness of the available data to answer the given question.
+
+### 2)Find and deal with outliers, anomalies, and missing data within the dataset.
+
+### 3)Perform univariate and bivariate analysis.
+
+### 4)From your insights provide a conclusion and recommendation.
+
+# 5)Reading the data
+
+```{r}
+#Importing the data
+df<-read.csv("http://bit.ly/IPAdvertisingData")
+head(df)
+```
+
+```{r}
+#previewing the dataset
+View(df)
+```
+
+```{r}
+#checking the column names
+colnames(df)
+```
+
+```{r}
+#previewing the head of the dataset
+head(df)
+```
+
+```{r}
+#previewing the tail of the dataset
+tail(df)
+```
+
+```{r}
+#structure of the data
+str(df)
+```
+
+```{r}
+#shape of the dataset
+dim(df)
+#the dataset has 1000 rows and 10 columns
+```
+
+# 5.0 Data cleaning
+
+## Checking for Missing values
+
+```{r}
+sum(is.na(df))
+#there are no missing values in the dataset
+```
+
+## Duplicates
+
+```{r}
+#checking for duplicates
+sum(duplicated(df))
+#there are no duplicates in the dataset
+```
+
+```{r}
+#removal of incomplete objects in the dataset
+head(na.omit(df))
+```
+
+## Checking for outliers in the various columns
+
+```{r}
+#selecting the columns
+daily_time_spent<-df$Daily.Time.Spent.on.Site
+daily_internet_uage<-df$Daily.Internet.Usage
+male<-df$Male
+clicked_on_ad<-df$Clicked.on.Ad
+age<-df$Age
+area_income<-df$Area.Income
+
+
+```
+
+## creating the boxplots
+
+```{r}
+boxplot(daily_time_spent)
+```
+
+```{r}
+boxplot(daily_internet_uage)
+```
+
+```{r}
+boxplot(male)
+```
+
+```{r}
+boxplot(clicked_on_ad)
+```
+
+```{r}
+boxplot(age)
+```
+
+```{r}
+boxplot(area_income)
+```
+
+presence of outliers is absent in most of the boxplot features apart
+from area income which is evident because people earn different amounts
+of income
+
+# 5.1 Uni-variate Analysis
+
+## Measures of dispersion
+
+### getting the summary statistics of each column
+
+```{r}
+summary(df)
+#the average daily internet usage is 180
+#the average age of people on the site is 36 years
+```
+
+## Uni-variate plots
+
+```{r}
+#histogram on daily time spent
+daily_time_spent <- df$Daily.Time.Spent.on.Site
+daily_time_spent_frequency <- table(daily_time_spent)
+hist(daily_time_spent,
+        col = "black")
+#the minimum time spent is 32 while the average is 65
+```
+
+```{r}
+age<-df$Age
+hist(age,col = "green")
+#age 60 had less frequency on the site while age 35 had more frequency on the site
+```
+
+```{r}
+#plotting bar plot on male column
+
+gender <- df$Male
+gender_freq <- table(gender)
+barplot(gender_freq,
+        col = "red")
+ #0 represented slightly more people compared to 1       
+```
+
+```{r}
+#histogram of selected features
+library(DataExplorer)
+plot_histogram(df)
+```
+
+## Bi variate Analysis
+
+```{r}
+timespent <- df$Daily.Time.Spent.on.Site
+internetusage<- df$Daily.Internet.Usage
+
+# Using the cov() function to determine the covariance
+
+cov(timespent, internetusage)
+```
+
+there is a high covariance between time spent and daily internet usage
+indicating a positive relation between the two variables
+
+```{r}
+# finding the correlation
+
+Age<-df$Age
+Daily.Internet.Usage<-df$Daily.Internet.Usage
+#using the cor function to find the correlation
+cor(Age, Daily.Internet.Usage)
+#There is a negative correlation between age and daily internet usage
+```
+
+## creating a correlation plot
+
+```{r}
+library(ggcorrplot)
+library(dplyr)
+corr = round(cor(select_if(df, is.numeric)), 4)
+ggcorrplot(corr, hc.order = T, ggtheme = ggplot2::theme_grey,
+   colors = c("cyan", "peachpuff4", "pink"), lab = T)
+
+```
+
+## creating a scatter-plot
+
+```{r}
+timespent <- df$Daily.Time.Spent.on.Site
+internetusage<- df$Daily.Internet.Usage
+
+plot(timespent, internetusage, xlab="Daily time spent on site", ylab="Daily Internet Usage")
+```
+
+# CONCLUSION
+
+### It was realized that the higher the age, the lower the time spent on the site.
+
+### People with high income levels visited the site more
+
+### The average age of visiting the ad site is 36years
+
+# Recommendation
+
+### More focus should be emphasized on the young people compared to the older people
